@@ -2,6 +2,7 @@ import SwiftUI
 import Charts
 
 /// 趋势图表组件
+/// 使用 SwiftUI Charts 展示打卡趋势
 struct TrendChart: View {
     let data: [TrendDataPoint]
     let timeRange: StatisticsTimeRange
@@ -22,6 +23,18 @@ struct TrendChart: View {
         .background(Color(.systemBackground))
         .cornerRadius(12)
         .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(chartAccessibilityLabel)
+    }
+    
+    /// 为 VoiceOver 生成图表描述
+    private var chartAccessibilityLabel: String {
+        if data.isEmpty {
+            return "打卡趋势图表，暂无数据"
+        }
+        let totalCheckIns = data.reduce(0) { $0 + $1.count }
+        let avgCheckIns = data.isEmpty ? 0 : totalCheckIns / data.count
+        return "打卡趋势图表，\(timeRange.rawValue)共 \(totalCheckIns) 次打卡，平均每天 \(avgCheckIns) 次"
     }
     
     private var chart: some View {

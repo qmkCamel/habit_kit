@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// 统计卡片组件
+/// 用于展示单个统计指标的卡片
 struct StatisticsCard: View {
     let title: String
     let value: String
@@ -30,6 +31,9 @@ struct StatisticsCard: View {
         .background(Color(.systemBackground))
         .cornerRadius(12)
         .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title): \(value)")
+        .accessibilityAddTraits(.isStaticText)
     }
 }
 

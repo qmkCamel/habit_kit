@@ -14,7 +14,8 @@ struct StatisticsView: View {
     }
     
     var body: some View {
-        NavigationView {
+        print("[DEBUG] StatisticsView.body - 开始渲染: habitCount=\(habits.count), timeRange=\(selectedTimeRange.rawValue)")
+        return NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
                     // 时间范围选择器
@@ -203,6 +204,7 @@ struct StatisticsView: View {
     // MARK: - 辅助方法
     
     private func generateTrendData() -> [TrendDataPoint] {
+        print("[DEBUG] StatisticsView.generateTrendData - 开始生成趋势数据: timeRange=\(selectedTimeRange.rawValue)")
         let calendar = Calendar.current
         let range = selectedTimeRange.dateRange
         let today = calendar.startOfDay(for: Date())
@@ -222,6 +224,8 @@ struct StatisticsView: View {
             interval = 7 // 每周
         }
         
+        print("[DEBUG] StatisticsView.generateTrendData - 参数: interval=\(interval), startDate=\(currentDate), endDate=\(endDate)")
+        
         while currentDate <= endDate {
             let checkInsCount = habits.reduce(0) { total, habit in
                 total + (habit.isCompleted(on: currentDate) ? 1 : 0)
@@ -235,16 +239,21 @@ struct StatisticsView: View {
             currentDate = nextDate
         }
         
+        print("[DEBUG] StatisticsView.generateTrendData - 生成完成: dataPointCount=\(dataPoints.count)")
         return dataPoints
     }
     
     private func getRankedHabits() -> [Habit] {
+        print("[DEBUG] StatisticsView.getRankedHabits - 获取排名: metric=\(selectedRankingMetric.label)")
+        let result: [Habit]
         switch selectedRankingMetric {
         case .completionRate:
-            return statistics.topHabitsByCompletionRate
+            result = statistics.topHabitsByCompletionRate
         case .streak:
-            return statistics.topHabitsByStreak
+            result = statistics.topHabitsByStreak
         }
+        print("[DEBUG] StatisticsView.getRankedHabits - 获取完成: count=\(result.count)")
+        return result
     }
     
     private func getMetricValue(for habit: Habit) -> String {

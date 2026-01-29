@@ -42,45 +42,68 @@ struct HabitStatistics {
     init(habits: [Habit], timeRange: StatisticsTimeRange = .all) {
         self.habits = habits
         self.timeRange = timeRange
+        print("[DEBUG] HabitStatistics.init - 初始化统计: habitCount=\(habits.count), timeRange=\(timeRange.rawValue)")
     }
     
     // MARK: - 总体统计
     
     /// 总打卡次数
     var totalCheckIns: Int {
+        print("[DEBUG] HabitStatistics.totalCheckIns - 开始计算总打卡")
         let range = timeRange.dateRange
-        return habits.reduce(0) { total, habit in
-            total + habit.getCheckInsInRange(range).count
+        let result = habits.reduce(0) { total, habit in
+            let checkIns = habit.getCheckInsInRange(range).count
+            print("[DEBUG] HabitStatistics.totalCheckIns - 累加习惯: name=\(habit.name), checkIns=\(checkIns)")
+            return total + checkIns
         }
+        print("[DEBUG] HabitStatistics.totalCheckIns - 计算完成: result=\(result)")
+        return result
     }
     
     /// 活跃习惯数（至少有一次打卡的习惯）
     var activeHabitsCount: Int {
-        habits.filter { !$0.completionDates.isEmpty }.count
+        print("[DEBUG] HabitStatistics.activeHabitsCount - 开始计算活跃习惯数")
+        let result = habits.filter { !$0.completionDates.isEmpty }.count
+        print("[DEBUG] HabitStatistics.activeHabitsCount - 计算完成: result=\(result), totalHabits=\(habits.count)")
+        return result
     }
     
     /// 平均完成率
     var averageCompletionRate: Double {
-        guard !habits.isEmpty else { return 0.0 }
+        print("[DEBUG] HabitStatistics.averageCompletionRate - 开始计算平均完成率")
+        guard !habits.isEmpty else {
+            print("[DEBUG] HabitStatistics.averageCompletionRate - 检测到空数据: 返回 0.0")
+            return 0.0
+        }
         
         let range = timeRange.dateRange
         let totalRate = habits.reduce(0.0) { sum, habit in
-            sum + habit.getCompletionRate(in: range)
+            let rate = habit.getCompletionRate(in: range)
+            print("[DEBUG] HabitStatistics.averageCompletionRate - 累加习惯完成率: name=\(habit.name), rate=\(String(format: "%.2f", rate * 100))%")
+            return sum + rate
         }
         
-        return totalRate / Double(habits.count)
+        let result = totalRate / Double(habits.count)
+        print("[DEBUG] HabitStatistics.averageCompletionRate - 计算完成: result=\(String(format: "%.2f", result * 100))%")
+        return result
     }
     
     // MARK: - 连续记录
     
     /// 当前最长连续天数（所有习惯中最长的当前连续）
     var currentLongestStreak: Int {
-        habits.map { $0.getCurrentStreak() }.max() ?? 0
+        print("[DEBUG] HabitStatistics.currentLongestStreak - 开始计算当前最长连续")
+        let result = habits.map { $0.getCurrentStreak() }.max() ?? 0
+        print("[DEBUG] HabitStatistics.currentLongestStreak - 计算完成: result=\(result)")
+        return result
     }
     
     /// 历史最长连续天数（所有习惯中最长的历史连续）
     var historicalLongestStreak: Int {
-        habits.map { $0.getLongestStreak() }.max() ?? 0
+        print("[DEBUG] HabitStatistics.historicalLongestStreak - 开始计算历史最长连续")
+        let result = habits.map { $0.getLongestStreak() }.max() ?? 0
+        print("[DEBUG] HabitStatistics.historicalLongestStreak - 计算完成: result=\(result)")
+        return result
     }
     
     /// 当前最长连续的习惯
@@ -97,20 +120,29 @@ struct HabitStatistics {
     
     /// 按完成率排名（降序）
     var topHabitsByCompletionRate: [Habit] {
+        print("[DEBUG] HabitStatistics.topHabitsByCompletionRate - 开始排序")
         let range = timeRange.dateRange
-        return habits.sorted { habit1, habit2 in
+        let sorted = habits.sorted { habit1, habit2 in
             habit1.getCompletionRate(in: range) > habit2.getCompletionRate(in: range)
         }
+        print("[DEBUG] HabitStatistics.topHabitsByCompletionRate - 排序完成: count=\(sorted.count)")
+        return sorted
     }
     
     /// 按当前连续天数排名（降序）
     var topHabitsByStreak: [Habit] {
-        habits.sorted { $0.getCurrentStreak() > $1.getCurrentStreak() }
+        print("[DEBUG] HabitStatistics.topHabitsByStreak - 开始排序")
+        let sorted = habits.sorted { $0.getCurrentStreak() > $1.getCurrentStreak() }
+        print("[DEBUG] HabitStatistics.topHabitsByStreak - 排序完成: count=\(sorted.count)")
+        return sorted
     }
     
     /// 按总打卡天数排名（降序）
     var topHabitsByTotalCheckIns: [Habit] {
-        habits.sorted { $0.getTotalCheckInDays() > $1.getTotalCheckInDays() }
+        print("[DEBUG] HabitStatistics.topHabitsByTotalCheckIns - 开始排序")
+        let sorted = habits.sorted { $0.getTotalCheckInDays() > $1.getTotalCheckInDays() }
+        print("[DEBUG] HabitStatistics.topHabitsByTotalCheckIns - 排序完成: count=\(sorted.count)")
+        return sorted
     }
     
     // MARK: - 时间范围统计

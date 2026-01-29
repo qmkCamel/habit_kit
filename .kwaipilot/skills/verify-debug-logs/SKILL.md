@@ -268,7 +268,7 @@ for habit in habits {
 
 **报告生成工具**: verify-debug-logs skill v1.0
 **参考规范**: debug-logging-standard
-```
+
 
 ### 5. 评分系统
 

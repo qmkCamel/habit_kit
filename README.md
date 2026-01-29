@@ -8,8 +8,15 @@
 - ✅ **习惯管理** - 创建、编辑和删除习惯
 - ✅ **打卡系统** - 每日打卡记录习惯完成情况
 - ✅ **热力图展示** - 类似 GitHub 贡献图的可视化展示
-- ✅ **统计分析** - 连续天数、完成率等统计信息
+- ✅ **数据统计** ✨ NEW - 全面的数据统计和可视化分析
 - ✅ **多视图模式** - 网格、列表、详情三种视图模式
+
+### 数据统计功能 ✨
+- **总体统计** - 总打卡次数、活跃习惯数、平均完成率
+- **连续记录** - 当前最长连续、历史最长连续
+- **趋势分析** - 可视化趋势图表（支持周/月/全部时间维度）
+- **习惯排名** - 按完成率或连续天数排序查看
+- **可视化组件** - 环形进度条、趋势图表、统计卡片
 
 ### 三种视图模式
 
@@ -31,15 +38,21 @@ habit_kit/
 ├── ContentView.swift           # 主视图
 ├── Models/                     # 数据模型层
 │   ├── Habit.swift            # 习惯模型
+│   ├── HabitStatistics.swift  # 统计数据模型 ✨
 │   └── ViewMode.swift         # 视图模式枚举
 ├── Views/                      # 视图层
 │   ├── GridView.swift         # 网格视图
 │   ├── ListView.swift         # 列表视图
 │   ├── DetailView.swift       # 详情视图
 │   ├── SettingsView.swift     # 设置视图
+│   ├── StatisticsView.swift   # 统计视图 ✨
 │   ├── Components/            # 可复用组件
 │   │   ├── HeatmapView.swift  # 热力图组件
-│   │   └── HabitCardView.swift # 习惯卡片组件
+│   │   ├── HabitCardView.swift # 习惯卡片组件
+│   │   ├── StatisticsCard.swift # 统计卡片 ✨
+│   │   ├── ProgressRing.swift   # 环形进度条 ✨
+│   │   ├── TrendChart.swift     # 趋势图表 ✨
+│   │   └── HabitRankingRow.swift # 排行榜行 ✨
 │   └── Sheets/                # 弹窗视图
 │       ├── AddHabitSheet.swift      # 添加习惯
 │       ├── EditHabitSheet.swift     # 编辑习惯
@@ -156,8 +169,8 @@ static let habitColors: [String] = [
 - [ ] 支持习惯分类
 - [ ] 添加成就系统
 - [ ] 支持 iCloud 同步
-- [ ] 添加数据分析图表
 - [ ] 支持深色模式优化
+- [x] ~~添加数据分析图表~~ ✅ 已完成（v1.1）
 
 ## 许可证
 
